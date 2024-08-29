@@ -6,23 +6,56 @@ on:
       - reopened
       - opened
       - closed
-      
+
+env:
+  ORG: jyasskin
+  SOURCE_REPO: test-design-reviews
+  MIRROR_REPO: test-design-reviews-private-brainstorming
+
 jobs:
-  mirror:
-    # The type of runner that the job will run on
+  open:
     runs-on: ubuntu-latest
-
     if: ${{ github.event.action == 'opened' }}
-
-    # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      - run: |
-          gh issue create --title "$TITLE" --body "Mirrored from: jyasskin/test-design-reviews#$ISSUE_ID
-          
-          $ISSUE_BODY" --repo "jyasskin/test-design-reviews-private-brainstorming"
+      - name: "Copy issue #${{ github.event.issue.number }}: ${{ github.event.issue.title }}"
+        run: |
+          gh issue create --title "$TITLE" --body "Mirrored from: $ORG/$SOURCE_REPO#$ISSUE_ID
+
+          $ISSUE_BODY" --repo "$ORG/$MIRROR_REPO"
 
         env:
           TITLE: ${{ github.event.issue.title }}
           ISSUE_ID: ${{ github.event.issue.number }}
           ISSUE_BODY: ${{ github.event.issue.body }}
+          # Requires Contents: read and Issues: read/write permissions.
+          GH_TOKEN: ${{ secrets.PRIVATE_BRAINSTORMING_GITHUB_TOKEN }}
+
+  update-state:
+    runs-on: ubuntu-latest
+    if: ${{ github.event.action != 'opened' }}
+    steps:
+      - name: Find mirrored issue number
+        run: |
+          mirroredIssue=$(gh api graphql -F q="\"Mirrored from: $ORG/$MIRROR_REPO#$ISSUE_ID\" in:body is:issue repo:$ORG/$MIRROR_REPO" -f query='
+            query($q: String!) {
+              search(type: ISSUE, query: $q, first: 1) {
+                nodes {
+                  ... on Issue {
+                    number
+                  }
+                }
+              }
+            }
+          ' --jq=.data.search.nodes[].number)
+
+          echo 'MIRRORED_ISSUE='$mirroredIssue >> $GITHUB_ENV
+      - if: ${{ github.event.action == 'closed' }}
+        name: Close mirrored issue
+        run: gh issue close $MIRRORED_ISSUE --repo "$ORG/$MIRROR_REPO"
+        env:
+          GH_TOKEN: ${{ secrets.PRIVATE_BRAINSTORMING_GITHUB_TOKEN }}
+      - if: ${{ github.event.action == 'reopened' }}
+        name: Reopen mirrored issue
+        run: gh issue reopen $MIRRORED_ISSUE --repo "$ORG/$MIRROR_REPO"
+        env:
           GH_TOKEN: ${{ secrets.PRIVATE_BRAINSTORMING_GITHUB_TOKEN }}
