@@ -49,6 +49,8 @@ jobs:
           ' --jq=.data.search.nodes[].number)
 
           echo 'MIRRORED_ISSUE='$mirroredIssue >> $GITHUB_ENV
+        env:
+          GH_TOKEN: ${{ secrets.PRIVATE_BRAINSTORMING_GITHUB_TOKEN }}
       - if: ${{ github.event.action == 'closed' }}
         name: Close mirrored issue
         run: gh issue close $MIRRORED_ISSUE --repo "$ORG/$MIRROR_REPO"
