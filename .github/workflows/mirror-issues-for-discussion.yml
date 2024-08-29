@@ -36,7 +36,7 @@ jobs:
     steps:
       - name: Find mirrored issue number
         run: |
-          mirroredIssue=$(gh api graphql -F q="\"Mirrored from: $ORG/$MIRROR_REPO#$ISSUE_ID\" in:body is:issue repo:$ORG/$MIRROR_REPO" -f query='
+          mirroredIssue=$(gh api graphql -F q="\"Mirrored from: $ORG/$SOURCE_REPO#$ISSUE_ID\" in:body is:issue repo:$ORG/$MIRROR_REPO" -f query='
             query($q: String!) {
               search(type: ISSUE, query: $q, first: 1) {
                 nodes {
@@ -47,17 +47,21 @@ jobs:
               }
             }
           ' --jq=.data.search.nodes[].number)
-
           echo 'MIRRORED_ISSUE='$mirroredIssue >> $GITHUB_ENV
+          echo "::debug::Found issue #$mirroredIssue."
         env:
           GH_TOKEN: ${{ secrets.PRIVATE_BRAINSTORMING_GITHUB_TOKEN }}
       - if: ${{ github.event.action == 'closed' }}
         name: Close mirrored issue
-        run: gh issue close $MIRRORED_ISSUE --repo "$ORG/$MIRROR_REPO"
+        run: |
+          gh issue close $MIRRORED_ISSUE --repo "$ORG/$MIRROR_REPO"
+          echo "Closed issue $ORG/$MIRROR_REPO#$MIRRORED_ISSUE" >> $GITHUB_STEP_SUMMARY
         env:
           GH_TOKEN: ${{ secrets.PRIVATE_BRAINSTORMING_GITHUB_TOKEN }}
       - if: ${{ github.event.action == 'reopened' }}
         name: Reopen mirrored issue
-        run: gh issue reopen $MIRRORED_ISSUE --repo "$ORG/$MIRROR_REPO"
+        run: |
+          gh issue reopen $MIRRORED_ISSUE --repo "$ORG/$MIRROR_REPO"
+          echo "Reopened issue $ORG/$MIRROR_REPO#$MIRRORED_ISSUE" >> $GITHUB_STEP_SUMMARY
         env:
           GH_TOKEN: ${{ secrets.PRIVATE_BRAINSTORMING_GITHUB_TOKEN }}
