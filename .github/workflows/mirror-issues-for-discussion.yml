@@ -50,6 +50,7 @@ jobs:
           echo 'MIRRORED_ISSUE='$mirroredIssue >> $GITHUB_ENV
           echo "::debug::Found issue #$mirroredIssue."
         env:
+          ISSUE_ID: ${{ github.event.issue.number }}
           GH_TOKEN: ${{ secrets.PRIVATE_BRAINSTORMING_GITHUB_TOKEN }}
       - if: ${{ github.event.action == 'closed' }}
         name: Close mirrored issue
