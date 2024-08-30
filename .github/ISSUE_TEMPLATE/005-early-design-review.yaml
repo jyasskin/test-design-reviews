@@ -1,0 +1,96 @@
+name: Early design review
+description: If you'd like the TAG to offer thoughts and guidance on an early-stage design direction
+labels:
+  - "Progress: untriaged"
+  - "Review type: early review"
+body:
+  - type: input
+    attributes:
+      label: I'm requesting a TAG review of
+      placeholder: feature name
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: One paragraph summary of idea
+      description: Ideally, you should copy-paste this from your Explainer's introduction.
+    validations:
+      required: true
+  - type: input
+    attributes:
+      label: Explainer (minimally containing user needs and example code)
+      description: |
+        For background, see our [explanation of how to write a good explainer](https://tag.w3.org/explainers/). We recommend the explainer to be in [Markdown](https://github.github.com/gfm/).
+      placeholder: URL
+  - type: textarea
+    attributes:
+      label: User research
+      placeholder: url to public summary/results of research
+  - type: input
+    attributes:
+      label: Security and Privacy self-review²
+      description: Even for early-stage ideas, a Security and Privacy questionnaire helps us understand potential security and privacy issues and mitigations for your design, and can save us asking redundant questions. See https://www.w3.org/TR/security-privacy-questionnaire/.
+      placeholder: URL
+  - type: input
+    attributes:
+      label: GitHub repo
+      placeholder: URL
+  - type: textarea
+    attributes:
+      label: Primary contacts (and their relationship to the specification)
+      description: we recommend including group chairs and editors in this list
+      value: |
+        - [name] ([github username]), [organization/s]
+        - [name] ([github username]), [organization/s] (repeat as necessary)
+  - type: input
+    attributes:
+      label: Organization/project driving the design
+      placeholder: organization and/or project name
+  - type: textarea
+    attributes:
+      label: External status/issue trackers for this feature (publicly visible, e.g. Chrome Status)
+
+  - type: markdown
+    attributes:
+      value: "## Further details:"
+
+  - type: checkboxes
+    attributes:
+      label: " "
+      options:
+        - label: I have reviewed the TAG's [Web Platform Design Principles](https://www.w3.org/TR/design-principles/)
+          required: false
+
+  - type: input
+    attributes:
+      label: The group where the incubation/design work on this is being done (or is intended to be done in the future)
+      placeholder: Working group name(s)
+
+  - type: input
+    attributes:
+      label: The group where standardization of this work is intended to be done ("unknown" if not known)
+
+  - type: textarea
+    attributes:
+      label: Existing major pieces of multi-implementer review or discussion of this design
+  - type: textarea
+    attributes:
+      label: Major unresolved issues with or opposition to this design
+  - type: input
+    attributes:
+      label: This work is being funded by
+
+  - type: textarea
+    attributes:
+      label: You should also know that...
+      description: Please tell us anything you think is relevant to this review.
+
+  - type: markdown
+    attributes:
+      value: |
+        CAREFULLY THIS BEFORE SUBMITTING
+
+        Please preview the issue and check that the links work before submitting.
+
+        In particular:
+          * if anything links to a URL which requires authentication (e.g. Google document), please make sure anyone with the link can access the document. We would prefer public documents though, since we work in the open.
