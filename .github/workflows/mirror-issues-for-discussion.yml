@@ -47,6 +47,10 @@ jobs:
               }
             }
           ' --jq=.data.search.nodes[].number)
+          if [ -z "$mirroredIssue" ]; then
+            echo "::error ::Can't find a mirror of $ORG/$SOURCE_REPO#$ISSUE_ID."
+            exit 1
+          fi
           echo 'MIRRORED_ISSUE='$mirroredIssue >> $GITHUB_ENV
           echo "::debug::Found issue #$mirroredIssue."
         env:
