@@ -54,12 +54,6 @@ body:
     attributes:
       value: "## Further details:"
 
-  - type: checkboxes
-    attributes:
-      label: I have reviewed the TAG's [Web Platform Design Principles](https://www.w3.org/TR/design-principles/)
-      options:
-        - label: "Yes"
-
   - type: input
     attributes:
       label: The group where the incubation/design work on this is being done (or is intended to be done in the future)
@@ -84,12 +78,9 @@ body:
       label: You should also know that...
       description: Please tell us anything you think is relevant to this review.
 
-  - type: markdown
+  - type: checkboxes
     attributes:
-      value: |
-        CAREFULLY THIS BEFORE SUBMITTING
-
-        Please preview the issue and check that the links work before submitting.
-
-        In particular:
-          * if anything links to a URL which requires authentication (e.g. Google document), please make sure anyone with the link can access the document. We would prefer public documents though, since we work in the open.
+      label: Double-check the following before submitting
+      options:
+        - label: I have reviewed the TAG's [Web Platform Design Principles](https://www.w3.org/TR/design-principles/)
+        - label: All of the links work from a private browsing session. In particular, Google docs are accessible.
