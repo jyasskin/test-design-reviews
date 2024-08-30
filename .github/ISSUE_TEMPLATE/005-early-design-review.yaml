@@ -56,10 +56,9 @@ body:
 
   - type: checkboxes
     attributes:
-      label: " "
+      label: I have reviewed the TAG's [Web Platform Design Principles](https://www.w3.org/TR/design-principles/)
       options:
-        - label: I have reviewed the TAG's [Web Platform Design Principles](https://www.w3.org/TR/design-principles/)
-          required: false
+        - label: Yes
 
   - type: input
     attributes:
